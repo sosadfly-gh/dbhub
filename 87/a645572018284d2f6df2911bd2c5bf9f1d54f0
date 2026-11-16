@@ -1,0 +1,26 @@
+.gitattributes
+  s_67aa83696b71e6::t_d18b6bd482300a 1-6
+.gitignore
+  h_07b9a916031a4e 24,71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "87a645572018284d2f6df2911bd2c5bf9f1d54f0",
+  "prompts": {},
+  "humans": {
+    "h_07b9a916031a4e": {
+      "author": "sosadfly <childrenbodyemail@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_67aa83696b71e6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e26b-58e6-7722-af24-b5973db9e336",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "sosadfly <childrenbodyemail@qq.com>"
+    }
+  }
+}
