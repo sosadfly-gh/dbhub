@@ -1,0 +1,47 @@
+src/connectors/interface.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 101-102,124-131
+src/connectors/doris-health-check.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 1-64
+src/tools/__tests__/health-check.test.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 5,100-168
+  s_a7ff6e475806e7::t_819582f2c929ec 169
+dbhub.toml.example
+  s_a7ff6e475806e7::t_51c83304b974f8 297-298,308-322
+skills/dbhub/SKILL.md
+  s_a7ff6e475806e7::t_51c83304b974f8 19,25
+src/connectors/__tests__/health-check-routing.test.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 1-121
+src/connectors/__tests__/doris-health-check.test.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 1-101
+src/connectors/mariadb/index.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 15-16,170,181,207-209,214,242,293-294
+src/connectors/mysql/index.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 15-16,215,226,266-268,273,301,357-358
+CLAUDE.md
+  s_a7ff6e475806e7::t_51c83304b974f8 38
+src/utils/tool-metadata.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 243,250-251
+src/tools/health-check.ts
+  s_a7ff6e475806e7::t_51c83304b974f8 3,55-56,70,76-80,87-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2acb8200ee0254344335b2db3c8890f234e8d51a",
+  "prompts": {},
+  "humans": {
+    "h_07b9a916031a4e": {
+      "author": "sosadfly <childrenbodyemail@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_a7ff6e475806e7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e27e-3055-7a22-b028-7a4edc6c5475",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "sosadfly <childrenbodyemail@qq.com>"
+    }
+  }
+}
