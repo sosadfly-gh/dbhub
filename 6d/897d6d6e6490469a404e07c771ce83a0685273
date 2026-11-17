@@ -1,0 +1,217 @@
+frontend/src/components/Sidebar/Sidebar.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 2,7,14-15,19,23-24,27,29-32,35-39,42,44-47,50-51,53-55,57-83,85
+frontend/src/hooks/use-mobile.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 6-7
+src/connectors/manager.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 16-17,313-315,628-635,638-639,645-646,652-660,664,667-702
+frontend/src/components/views/SourceDetailView.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 7,14,20,26,31,35-36,42,45-46,51,58,60,64,66,69-70,75-76,81-82,88-89,95-96,102-103,108,111,124-125,130,132,140-141,149-150,158-159,168-169,173-176,178-180,182,184,187,191,197-198,203-205,208,211-213,216
+server.json
+  s_a1aeddc33d322c::t_7d9a292715aab0 10,15
+frontend/src/components/ui/sheet.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 25
+src/connectors/sqlserver/index.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 49-50,72-81,120
+docs/claude-code-plugin.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 33
+frontend/src/components/ui/sidebar.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 497
+docs/images/logo/full-light.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-24
+docs/mcpb.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 55
+.env.example
+  s_a1aeddc33d322c::t_7d9a292715aab0 6-7,25
+docs/config/toml.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 173,175-176,239,262-265,291-292,352-353,587-609,803,822,1032
+frontend/src/components/Layout.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1,3,6-8,19-24,27-57
+frontend/src/components/tool/types.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 9-10
+frontend/src/components/tool/ResultsTable.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1,3,5-7,12,17,20,23-27,29-30,34,36,38-39,42-43,45,49,51-55,57-72,77-80,84-106,108,110,112-130,135-136,139-159,163-212,214-215,217-226,228-243
+frontend/src/components/ui/button.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 9,32
+scripts/sync-branding.mjs
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-31
+plugin/.mcp.json
+  s_a1aeddc33d322c::t_7d9a292715aab0 7
+src/config/toml-loader.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 9-14,291-299,362,489-498,726,832-849,1004-1005,1010,1048-1058,1203-1205,1225-1258,1266,1270,1290,1294,1311,1373
+assets/branding/svg/dbhub-wordmark-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-14
+src/utils/__tests__/readonly-transaction.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 4-5,56-66
+  s_a1aeddc33d322c::t_8967a1547826a1 67
+frontend/src/components/views/RequestView.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 8-9,81,95,109,118,137,142-144,147,164,170-171,181,183,187,190-191,201,216,234,237-238,241,244,247,250,255,257-258,264,272,282,285,297-300,302
+skills/dbhub/SKILL.md
+  s_a1aeddc33d322c::t_d3d219ad3dd56c 25
+src/utils/sqlite-dsn.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-161
+src/utils/readonly-transaction.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 33-37,66-69,73,75,79-92,133,135,199-200
+docs/images/logo/full-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-24
+BRANDING.md
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-279
+assets/branding/svg/dbhub-wordmark-light.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-14
+frontend/public/logo-full-light.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-24
+frontend/src/components/Gutter/GutterIcon.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 16-19,21-24,28-37
+docs/favicon.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-10
+src/connectors/__tests__/health-check-routing.test.ts
+  s_a1aeddc33d322c::t_d3d219ad3dd56c 7,15
+docs/images/logo/text-light.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-13
+assets/branding/svg/dbhub-logo-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-25
+frontend/src/components/ui/spinner.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 11
+src/connectors/mysql/index.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 199-233,246-247,251-252,269-272,313,423
+  s_a1aeddc33d322c::t_183f801dfef18e 198
+assets/branding/svg/dbhub-logo-light.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-25
+docs/workbench/tool-execution.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 12,22
+src/utils/__tests__/sqlite-dsn.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-155
+src/connectors/__tests__/dsn-parser.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 534-569
+docs/workbench/overview.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 8
+dbhub.toml.example
+  s_a1aeddc33d322c::t_d3d219ad3dd56c 314
+  s_a1aeddc33d322c::t_7d9a292715aab0 261-262,267-271,441
+assets/branding/svg/dbhub-icon-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-10
+frontend/src/components/Sidebar/Logo.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 5-10,13-23
+assets/branding/README.txt
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-29
+src/utils/dsn-obfuscate.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 4,38-42
+plugin/.claude-plugin/plugin.json
+  s_a1aeddc33d322c::t_7d9a292715aab0 4
+frontend/src/components/views/ToolDetailView.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 9-11,21,32,37-49,54-57,66,72,76-77,89,91-104,108,120,126,130,150,156,187,198,202-218,222-225,233,236,252,257,259,265-266,271-274,280-286,289-293,314,317-318,328,330-331,333,339,351,355-356,358,364,367-383,385-408,410-427,430-433,436,445-449
+frontend/src/components/tool/SqlEditor.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 5-6,10-17,20,30-31,41-42,57,89-93,95,101-104,110-133,137-138,172-180,202
+docs/config/debug.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 39-50
+docs/quickstart.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 138
+src/connectors/__tests__/manager.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 353-479,771-775,781,786-787,810,814-815,817-820,824,828,830,841,846,853,860
+assets/branding/svg/dbhub-icon-light.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-10
+frontend/src/api/tools.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 108
+docs/config/command-line.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 240,243,246-251,255-273,288,337
+docs/tools/execute-sql.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 12,115,118
+frontend/src/components/tool/ParameterForm.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1,5-6,10-11,14-26,28,30-37,43,45-60,62-103,105-108,110-111,113-115
+frontend/src/components/tool/ResultsTabs.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-2,6,15,30,41,43,45-46,58-60,62-70,73-118,124-125,129-136,138-139,142-145,151-158,161,163-185,187-191,195-204
+docs/index.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 8,14,57-60,147
+frontend/src/components/ui/dialog.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 28,73,75
+src/connectors/mariadb/index.ts
+  s_a1aeddc33d322c::t_11d3cdd0913727 261
+  s_a1aeddc33d322c::t_7d9a292715aab0 26,193-196,287,291
+frontend/public/favicon.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-10
+src/types/config.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 60
+docs/workbench/request-trace.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 8
+frontend/src/components/Gutter/GutterSourceItem.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 6,24,26-28,33-36,40-41,44,49
+docs/tools/custom-tools.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 248
+docs/images/logo/text-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-13
+docs/README.md
+  s_a1aeddc33d322c::t_7d9a292715aab0 3-4
+frontend/src/components/tool/RunButton.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 7,12-13,18,21,25,27,29,31,41,47,57
+frontend/package.json
+  s_a1aeddc33d322c::t_7d9a292715aab0 15,18
+frontend/public/logo-full-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-25
+frontend/src/components/ErrorBoundary.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 35-36
+frontend/src/components/ui/input.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 27,36
+src/connectors/__tests__/mysql-pool-wait.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-92
+src/connectors/__tests__/mysql.integration.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 606-632
+frontend/src/components/Identifier.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-9
+src/connectors/__tests__/sqlite.integration.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 1,547-558,560-563,565-575,578-585,587-588,590-628,630-649,730,732-733,738-741
+docs/images/logo/icon.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-9
+frontend/src/components/WorkbenchState.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-56
+frontend/src/components/Gutter/Gutter.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1,20,43,46-47,51-70,74-75
+docs/images/logo/icon-dark.svg
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-10
+frontend/src/components/views/NotFoundView.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 5,8,11
+package.json
+  s_a1aeddc33d322c::t_7d9a292715aab0 3,38
+CLAUDE.md
+  s_a1aeddc33d322c::t_7d9a292715aab0 179
+docs/config/read-only-mode.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 1-62
+frontend/src/index.css
+  s_a1aeddc33d322c::t_7d9a292715aab0 1,17-21,23-52,54-55,59-83,111-112,118-156,166-180,183-203,208-216,219-223,226-230,235-236,238-247
+frontend/src/components/ui/skeleton.tsx
+  s_a1aeddc33d322c::t_7d9a292715aab0 7
+src/config/__tests__/env.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 14,108,113-135,143,254-286
+  s_a1aeddc33d322c::t_9a50a4c926fcf3 287-288
+docs/docs.json
+  s_a1aeddc33d322c::t_7d9a292715aab0 9-11,21-30,49
+docs/tools/overview.mdx
+  s_a1aeddc33d322c::t_7d9a292715aab0 26
+README.md
+  s_a1aeddc33d322c::t_7d9a292715aab0 70-71,90,123
+  s_a1aeddc33d322c::t_21621e86fc0548 124
+src/config/__tests__/toml-loader.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 142-183,475,673-676,1065-1066,1073-1089,1194-1203,1330,1336
+src/config/env.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 12,197-207,805-819,824,828
+src/connectors/__tests__/readonly-transaction-strategy.test.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 32-35,429-434,437,441-445
+src/connectors/sqlite/index.ts
+  s_a1aeddc33d322c::t_7d9a292715aab0 10-11,33-37,43,46-49,65,78-98,100-102,208-227,229-234,236-238,240-246,252-255
+pnpm-lock.yaml
+  s_a1aeddc33d322c::t_84133b6bce8c1f 142-144,151-153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6d897d6d6e6490469a404e07c771ce83a0685273",
+  "prompts": {},
+  "sessions": {
+    "s_a1aeddc33d322c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e818-7e69-7483-9804-8f3d6a42f82e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "sosadfly <childrenbodyemail@qq.com>"
+    }
+  }
+}
