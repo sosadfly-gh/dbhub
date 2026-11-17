@@ -6,9 +6,9 @@
   },
   "name": "DBHub, Minimal Database MCP Server",
   "colors": {
-    "primary": "#335DFF",
-    "light": "#E8ECFF",
-    "dark": "#0A1633"
+    "primary": "#323236",
+    "light": "#FFFFFF",
+    "dark": "#323236"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -18,7 +18,16 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["index", "installation", "quickstart", "mcpb", "claude-code-plugin"]
+            "pages": [
+              "index",
+              {
+                "group": "Installation",
+                "root": "installation",
+                "expanded": true,
+                "pages": ["mcpb", "claude-code-plugin"]
+              },
+              "quickstart"
+            ]
           },
           {
             "group": "MCP Tools",
@@ -37,7 +46,7 @@
           },
           {
             "group": "Configuration",
-            "pages": ["config/command-line", "config/toml", "config/debug"]
+            "pages": ["config/command-line", "config/toml", "config/read-only-mode", "config/debug"]
           }
         ]
       },

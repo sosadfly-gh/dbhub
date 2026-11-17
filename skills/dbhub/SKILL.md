@@ -22,7 +22,7 @@ If multiple databases are configured, DBHub registers separate tools for each so
 
 If `explain_sql` is available (check the tool list), prefer it over guessing whether a query will be efficient — it's always safe to call, even against a write-enabled or read-only source, since it never executes the statement.
 
-If `health_check` is available and a query seems slow or connections seem exhausted, collect its diagnostics before speculating about the cause. Automatically detected Doris through MySQL/MariaDB returns visible connection statistics and native FE/BE rows; unsupported connection metrics are null and buffer-cache diagnostics are omitted, which does not mean zero. Empty node arrays do not establish health, and Cloud Mode disk-capacity values may be placeholders. Concurrent diagnostics are not a point-in-time snapshot. Use the source-specific health-check tool in multi-source mode.
+If `health_check` is available and a query seems slow or connections seem exhausted, collect its diagnostics before speculating about the cause. Automatically detected Doris through mysql:// returns visible connection statistics and native FE/BE rows; unsupported connection metrics are null and buffer-cache diagnostics are omitted, which does not mean zero. Empty node arrays do not establish health, and Cloud Mode disk-capacity values may be placeholders. Concurrent diagnostics are not a point-in-time snapshot. Use the source-specific health-check tool in multi-source mode.
 
 ## The Explore-Then-Query Workflow
 

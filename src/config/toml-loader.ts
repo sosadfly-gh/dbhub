@@ -6,6 +6,12 @@ import type { SourceConfig, TomlConfig, ToolConfig } from "../types/config.js";
 import { parseCommandLineArgs, requireFlagValue } from "./env.js";
 import { parseConnectionInfoFromDSN, getDefaultPortForType } from "../utils/dsn-obfuscate.js";
 import { SafeURL } from "../utils/safe-url.js";
+import {
+  SQLITE_DSN_PREFIX,
+  buildSqliteDSN,
+  normalizeSqliteDsn,
+  resolveSqliteFilePath,
+} from "../utils/sqlite-dsn.js";
 import { MAX_QUERY_TIMEOUT_SECONDS } from "../utils/query-timeout.js";
 import { validateSessionSettings } from "../utils/session-settings.js";
 import { BUILTIN_TOOL_EXECUTE_SQL, BUILTIN_TOOL_SEARCH_OBJECTS, ALL_BUILTIN_TOOL_NAMES } from "../tools/builtin-tools.js";
@@ -282,6 +288,15 @@ function getRawDSNQueryParam(dsn: string, key: string): string | null {
   if (key === "sslmode" && dsn.startsWith("sqlserver://")) {
     return new URLSearchParams(dsn.substring(queryStart + 1)).get(key);
   }
+  // SQL Server's applicationIntent key is also matched case-insensitively.
+  if (key === "applicationIntent" && dsn.startsWith("sqlserver://")) {
+    for (const [rawKey, value] of new URLSearchParams(dsn.substring(queryStart + 1))) {
+      if (rawKey.toLowerCase() === "applicationintent") {
+        return value;
+      }
+    }
+    return null;
+  }
   for (const pair of dsn.substring(queryStart + 1).split("&")) {
     if (pair === "") {
       continue;
@@ -344,7 +359,7 @@ function validateReadableFile(
  *
  * A DSN already encodes the connection identity (type/host/port/database/user/
  * password) and may carry query parameters (sslmode/sslrootcert/sslcert/sslkey plus the SQL
- * Server instanceName/authentication/domain). When the user also sets one of
+ * Server instanceName/authentication/domain/applicationIntent). When the user also sets one of
  * those as a standalone field with a different value, the DSN wins at connection
  * time (buildDSNFromSource returns the DSN), so the field would be silently
  * ignored — we fail fast here instead.
@@ -469,6 +484,16 @@ function validateDSNFieldConflicts(source: SourceConfig, configPath: string): vo
   const dsnDomain = getRawDSNQueryParam(source.dsn!, "domain");
   if (source.domain && dsnDomain !== null && dsnDomain !== source.domain) {
     conflict("domain", source.domain, dsnDomain);
+  }
+
+  // Case-insensitive, like the SQL Server DSN parser.
+  const dsnApplicationIntent = getRawDSNQueryParam(source.dsn!, "applicationIntent");
+  if (
+    source.applicationIntent &&
+    dsnApplicationIntent !== null &&
+    dsnApplicationIntent.toLowerCase() !== String(source.applicationIntent).toLowerCase()
+  ) {
+    conflict("applicationIntent", source.applicationIntent, dsnApplicationIntent);
   }
 
   // A repeated wallet parameter is ambiguous: this loader reads the first
@@ -698,7 +723,7 @@ function validateSourceConfig(source: SourceConfig, configPath: string): void {
 
   // Reject fields that contradict the DSN. A DSN already encodes the connection
   // identity (type/host/port/database/user/password) and may carry query params
-  // (sslmode/sslrootcert/sslcert/sslkey/instanceName/authentication/domain). When the same value
+  // (sslmode/sslrootcert/sslcert/sslkey/instanceName/authentication/domain/applicationIntent). When the same value
   // is also set as a standalone field with a different value, the field is
   // silently ignored at connection time, so we fail fast instead.
   if (source.dsn) {
@@ -800,6 +825,24 @@ function validateSourceConfig(source: SourceConfig, configPath: string): void {
       throw new Error(
         `Configuration file ${configPath}: source '${source.id}' has domain but authentication is set to '${source.authentication}'. ` +
           `Domain is only valid with authentication = "ntlm".`
+      );
+    }
+  }
+
+  // Validate applicationIntent field
+  if (source.applicationIntent !== undefined) {
+    if (source.type !== "sqlserver") {
+      throw new Error(
+        `Configuration file ${configPath}: source '${source.id}' has applicationIntent but it is only supported for SQL Server.`
+      );
+    }
+    if (
+      typeof source.applicationIntent !== "string" ||
+      !["readonly", "readwrite"].includes(source.applicationIntent.toLowerCase())
+    ) {
+      throw new Error(
+        `Configuration file ${configPath}: source '${source.id}' has invalid applicationIntent '${source.applicationIntent}'. ` +
+          `Valid values: ReadOnly, ReadWrite`
       );
     }
   }
@@ -958,46 +1001,13 @@ function validateSourceConfig(source: SourceConfig, configPath: string): void {
  * rather than process.cwd(), so a config names the same database no matter
  * where the server was launched from.
  *
- * Separators are normalised to forward slashes: path.resolve yields backslashes
- * on Windows, and the drive-letter branch of SQLiteDSNParser only matches
- * `C:/...`, so a backslash path would survive the DSN round-trip with a spurious
- * leading slash.
+ * Separators are normalised to forward slashes, so a Windows path reads the
+ * same in the DSN, the startup table and API responses.
  *
  * `:memory:` is a sentinel rather than a path and is passed through untouched.
  */
 function resolveSqliteDatabasePath(database: string, configPath: string): string {
-  if (database === ":memory:") {
-    return database;
-  }
-
-  const expanded = expandHomeDir(database);
-  const absolute = path.isAbsolute(expanded)
-    ? expanded
-    : path.resolve(path.dirname(configPath), expanded);
-
-  return absolute.replace(/\\/g, "/");
-}
-
-/**
- * Encode a SQLite database path as a DSN that SQLiteDSNParser decodes back to
- * the same path.
- *
- * The parser reads the path positionally, so the slash count is load-bearing.
- * `sqlite://` followed by a leading-slash path yields pathname `/<path>`, which
- * the parser returns unchanged for POSIX paths and de-prefixes for `C:/` drive
- * letters. Prefixing three slashes unconditionally instead turns
- * `/var/lib/x.db` into `sqlite:////var/lib/x.db`, whose pathname starts with
- * `//` and loses its leading slash on the way back out — silently converting an
- * absolute path into a relative one.
- *
- * `database` is expected to already be resolved (see resolveSqliteDatabasePath).
- */
-function buildSqliteDSN(database: string): string {
-  if (database === ":memory:") {
-    return "sqlite:///:memory:";
-  }
-
-  return `sqlite://${database.startsWith("/") ? database : `/${database}`}`;
+  return resolveSqliteFilePath(database, path.dirname(configPath)).replace(/\\/g, "/");
 }
 
 /**
@@ -1035,9 +1045,17 @@ function processSourceConfigs(
       processed.database = resolveSqliteDatabasePath(processed.database, configPath);
     }
 
-    // Expand ~ in DSN for SQLite
-    if (processed.dsn && processed.dsn.startsWith("sqlite:///~")) {
-      processed.dsn = `sqlite:///${expandHomeDir(processed.dsn.substring(11))}`;
+    // Expand ~ and resolve a relative path in a SQLite DSN, against the config
+    // file's directory like the `database` field above
+    if (processed.dsn && processed.dsn.startsWith(SQLITE_DSN_PREFIX)) {
+      try {
+        processed.dsn = normalizeSqliteDsn(processed.dsn, path.dirname(configPath));
+      } catch (error) {
+        throw new Error(
+          `Configuration file ${configPath}: source '${source.id}' has an invalid SQLite DSN: ` +
+            `${error instanceof Error ? error.message : String(error)}`
+        );
+      }
     }
 
     // Parse DSN to populate connection info fields (if not already set)
@@ -1166,16 +1184,8 @@ function expandHomeDir(filePath: string): string {
  * or as a DSN query parameter) into an existing DSN. Only appends a param when
  * the DSN does not already specify it; conflicting values are rejected earlier
  * by validateSourceConfig, so any param already present is guaranteed to match.
- *
- * This mirrors the query parameters built by the connection-params path of
- * buildDSNFromSource so both paths produce equivalent DSNs.
  */
 function mergeSourceFieldsIntoDSN(dsn: string, source: SourceConfig): string {
-  // SQLite DSNs never carry these parameters
-  if (source.type === "sqlite") {
-    return dsn;
-  }
-
   try {
     // Parse only to validate the DSN; if it can't be parsed, leave it untouched
     // and let the connector surface the error.
@@ -1190,27 +1200,9 @@ function mergeSourceFieldsIntoDSN(dsn: string, source: SourceConfig): string {
   // conflicting field is set.
   const hasParam = (key: string): boolean => getRawDSNQueryParam(dsn, key) !== null;
 
-  const additions: string[] = [];
-
-  // SQL Server query parameters
-  if (source.type === "sqlserver") {
-    if (source.instanceName && !hasParam("instanceName")) {
-      additions.push(`instanceName=${encodeURIComponent(source.instanceName)}`);
-    }
-    if (source.authentication && !hasParam("authentication")) {
-      additions.push(`authentication=${encodeURIComponent(source.authentication)}`);
-    }
-    if (source.domain && !hasParam("domain")) {
-      additions.push(`domain=${encodeURIComponent(source.domain)}`);
-    }
-  }
-
-  if (source.sslmode && !hasParam("sslmode")) {
-    additions.push(`sslmode=${source.sslmode}`);
-  }
-
-  additions.push(...postgresSslFileParams(source).filter(({ key }) => !hasParam(key)).map(({ param }) => param));
-  additions.push(...oracleWalletParams(source).filter(({ key }) => !hasParam(key)).map(({ param }) => param));
+  const additions = dualHomeQueryParams(source)
+    .filter(({ key }) => !hasParam(key))
+    .map(({ param }) => param);
 
   if (additions.length === 0) {
     return dsn;
@@ -1230,6 +1222,40 @@ function mergeSourceFieldsIntoDSN(dsn: string, source: SourceConfig): string {
   return `${dsn}${separator}${additions.join("&")}`;
 }
 
+/** A DSN query parameter derived from a TOML source field: its key and the encoded `key=value` pair. */
+type SourceQueryParam = { key: string; param: string };
+
+/** SQL Server fields that are passed through as DSN query parameters of the same name. */
+const SQLSERVER_QUERY_FIELDS = ["instanceName", "authentication", "domain", "applicationIntent"] as const;
+
+/**
+ * Every "dual-home" field of a source (settable as a TOML field or as a DSN
+ * query parameter) rendered as a DSN query parameter, in emission order. The
+ * single source for both DSN paths of buildDSNFromSource: building a DSN from
+ * connection parameters uses all of them, merging into a user-supplied DSN
+ * skips the ones that DSN already carries.
+ */
+function dualHomeQueryParams(source: SourceConfig): SourceQueryParam[] {
+  // SQLite DSNs never carry these parameters
+  if (source.type === "sqlite") {
+    return [];
+  }
+  const params: SourceQueryParam[] = [];
+  if (source.type === "sqlserver") {
+    for (const key of SQLSERVER_QUERY_FIELDS) {
+      const value = source[key];
+      if (value) {
+        params.push({ key, param: `${key}=${encodeURIComponent(value)}` });
+      }
+    }
+  }
+  if (source.sslmode) {
+    params.push({ key: "sslmode", param: `sslmode=${source.sslmode}` });
+  }
+  params.push(...postgresSslFileParams(source), ...oracleWalletParams(source));
+  return params;
+}
+
 /**
  * PostgreSQL SSL file parameters (sslrootcert/sslcert/sslkey) to append to a
  * DSN query string, with `~/` expanded and the path percent-encoded. Only the
@@ -1237,11 +1263,11 @@ function mergeSourceFieldsIntoDSN(dsn: string, source: SourceConfig): string {
  * verify-* modes, sslcert/sslkey for require/verify-ca/verify-full
  * (disable or an unset sslmode is rejected by validation).
  */
-function postgresSslFileParams(source: SourceConfig): Array<{ key: string; param: string }> {
+function postgresSslFileParams(source: SourceConfig): SourceQueryParam[] {
   if (source.type !== "postgres") {
     return [];
   }
-  const params: Array<{ key: string; param: string }> = [];
+  const params: SourceQueryParam[] = [];
   const push = (key: "sslrootcert" | "sslcert" | "sslkey"): void => {
     params.push({ key, param: `${key}=${encodeURIComponent(expandHomeDir(source[key]!))}` });
   };
@@ -1261,11 +1287,11 @@ function postgresSslFileParams(source: SourceConfig): Array<{ key: string; param
  * `~/` expanded in wallet_location. Validation already restricts them to Oracle
  * sources with sslmode require or verify-full.
  */
-function oracleWalletParams(source: SourceConfig): Array<{ key: string; param: string }> {
+function oracleWalletParams(source: SourceConfig): SourceQueryParam[] {
   if (source.type !== "oracle") {
     return [];
   }
-  const params: Array<{ key: string; param: string }> = [];
+  const params: SourceQueryParam[] = [];
   for (const key of ORACLE_WALLET_FIELDS) {
     const value = source[key];
     if (value) {
@@ -1282,7 +1308,7 @@ function oracleWalletParams(source: SourceConfig): Array<{ key: string; param: s
  */
 export function buildDSNFromSource(source: SourceConfig): string {
   // If DSN is already provided, use it — but merge in dual-home fields
-  // (sslmode/sslrootcert/sslcert/sslkey/instanceName/authentication/domain) so they actually
+  // (sslmode/sslrootcert/sslcert/sslkey/instanceName/authentication/domain/applicationIntent) so they actually
   // affect the connection. Conflicts between the DSN query string and these
   // fields are rejected at validation time, so any param already present in the
   // DSN is guaranteed to match.
@@ -1344,29 +1370,7 @@ export function buildDSNFromSource(source: SourceConfig): string {
   // Build base DSN
   let dsn = `${source.type}://${encodedUser}:${encodedPassword}@${source.host}:${port}/${encodedDatabase}`;
 
-  // Collect query parameters
-  const queryParams: string[] = [];
-
-  // Add SQL Server specific parameters
-  if (source.type === "sqlserver") {
-    if (source.instanceName) {
-      queryParams.push(`instanceName=${encodeURIComponent(source.instanceName)}`);
-    }
-    if (source.authentication) {
-      queryParams.push(`authentication=${encodeURIComponent(source.authentication)}`);
-    }
-    if (source.domain) {
-      queryParams.push(`domain=${encodeURIComponent(source.domain)}`);
-    }
-  }
-
-  // Add sslmode for network databases (not sqlite)
-  if (source.sslmode && source.type !== "sqlite") {
-    queryParams.push(`sslmode=${source.sslmode}`);
-  }
-
-  queryParams.push(...postgresSslFileParams(source).map(({ param }) => param));
-  queryParams.push(...oracleWalletParams(source).map(({ param }) => param));
+  const queryParams = dualHomeQueryParams(source).map(({ param }) => param);
 
   // Append query string if any params exist
   if (queryParams.length > 0) {

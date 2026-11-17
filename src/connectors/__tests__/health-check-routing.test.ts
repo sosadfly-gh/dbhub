@@ -4,7 +4,7 @@ import { getDorisHealthCheck } from "../doris-health-check.js";
 import { getMySQLFamilyHealthCheck } from "../mysql-family-health-check.js";
 
 const mysqlCreatePool = vi.fn();
-const mariadbCreatePool = vi.fn();
+
 vi.mock("mysql2/promise", () => ({
   default: {
     get createPool() {
@@ -12,7 +12,7 @@ vi.mock("mysql2/promise", () => ({
     },
   },
 }));
-vi.mock("mariadb", () => ({ createPool: (...args: any[]) => mariadbCreatePool(...args) }));
+
 vi.mock("../doris-health-check.js", () => ({
   getDorisHealthCheck: vi.fn(async () => ({ nodes: { frontends: [], backends: [] } })),
 }));
@@ -20,7 +20,6 @@ vi.mock("../mysql-family-health-check.js", () => ({
   getMySQLFamilyHealthCheck: vi.fn(async () => ({ notes: ["native"] })),
 }));
 const { MySQLConnector } = await import("../mysql/index.js");
-const { MariaDBConnector } = await import("../mariadb/index.js");
 
 describe.each([
   {
@@ -28,12 +27,6 @@ describe.each([
     Connector: MySQLConnector,
     createPool: mysqlCreatePool,
     wrap: (rows: any[]) => [rows, []],
-  },
-  {
-    name: "mariadb",
-    Connector: MariaDBConnector,
-    createPool: mariadbCreatePool,
-    wrap: (rows: any[]) => rows,
   },
 ])("$name health routing", ({ name, Connector, createPool, wrap }) => {
   const dsn = `${name}://user:pass@localhost:3306/db`;
